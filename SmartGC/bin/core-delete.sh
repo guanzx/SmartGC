@@ -71,7 +71,7 @@ deleteWholeDirData() {
 		then
 			rm -rf $1/$fileName
 		fi
-    done
+	done
 }
 
 deleteConcreteData() {
@@ -97,7 +97,7 @@ deleteConcreteData() {
 				fi
 			fi		
 		fi
-    done
+	done
 }
 
 if [[ $limit != "" ]]
