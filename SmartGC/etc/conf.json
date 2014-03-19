@@ -1,91 +1,90 @@
 {
     "logType":[
         {
-            "type":"mc",
-            "baseDir":"",
+            "typeId":"mc",
             "pathType":[
                 {
-                    "path":"tmp",
-                    "pathDir":"$LOCAL_MC_TMP_DIR",
-                    "file":[
+                    "pathId":"tmp",
+                    "pathDir":"",
+                    "pathName":[
                         {
-                            "format":"clk_bcp_$yyyy$mm$dd$hh",
-                            "operation":"delete",
-                            "limit":7
+                            "fileDir":"$LOCAL_MC_TMP_DIR",
+                            "fileName":[
+                                {
+                                    "format":"clk_bcp_$yyyy$mm$dd$hh",
+                                    "operate":"delete",
+                                    "limit":7
+                                },
+                                {
+                                    "format":"imp_bcp_$yyyy$mm$dd$hh",
+                                    "operate":"delete",
+                                    "limit":7
+                                }
+                            ],
+                            "operate":""
+                        }
+                    ],
+                    "operate":""
+                },
+                {
+                    "pathId":"stage",
+                    "pathDir":"",
+                    "pathName":[
+                        {
+                            "fileDir":"",
+                            "fileName":[
+                                {
+                                    "format":"area_info_$yyyy$mm$dd$hh",
+                                    "operate":"delete",
+                                    "limit":7
+                                },
+                                {
+                                    "format":"mc_uv_assist_$yyyy$mm$dd$hh",
+                                    "operate":"delete",
+                                    "limit":7
+                                }
+                            ],
+                            "operate":""
+                        }
+                    ],
+                    "operate":""
+                },
+                {
+                    "pathId":"output",
+                    "pathDir":"",
+                    "pathName":[
+                        {
+                            "fileDir":"$LOCAL_MC_OUTPUT_DIR/$yyyy$mm$dd",
+                            "fileName":[
+                                {
+                                    "format":"cc_block_$",
+                                    "operate":"bak",
+                                    "limit":"8"
+                                }
+                            ],
+                            "operate":""
                         },
                         {
-                            "format":"imp_bcp_$yyyy$mm$dd$hh",
-                            "operation":"delete",
-                            "limit":7
+                            "fileDir":"$LOCAL_MC_OUTPUT_DIR/stableuv",
+                            "fileName":[
+                                {
+                                    "format":"cc_block_$",
+                                    "operate":"bak",
+                                    "limit":"8"
+                                }
+                            ],
+                            "operate":""
                         }
                     ],
-                    "deleteWholeDir":"0"
-                },
-                {
-                    "path":"stage",
-                    "pathDir":"$LOCAL_MC_PREPARE_STAGE_DIR",
-                    "file":[
-                        {
-                            "format":"area_info_$yyyy$mm$dd$hh",
-                            "operation":"delete",
-                            "limit":7
-                        },
-                        {
-                            "format":"mc_uv_assist_$yyyy$mm$dd$hh",
-                            "operation":"delete",
-                            "limit":7
-                        }
-                    ],
-                    "deleteWholeDir":"0"
-                },
-                {
-                    "path":"output",
-                    "pathDir":"$LOCAL_MC_OUTPUT_DIR/$yyyy$mm$dd",
-                    "file":[
-                        {
-                            "format":"cc_block_$",
-                            "operation":"bak",
-                            "limit":"8"
-                        }
-                    ],
-                    "deleteWholeDir":"0"
-                },
-                {
-                    "path":"output",
-                    "pathDir":"$LOCAL_MC_OUTPUT_DIR/stableuv",
-                    "file":[
-                        {
-                            "format":"$yyyy$yy",
-                            "operation":"bak",
-                            "limit":"8"
-                        }
-                    ],
-                    "deleteWholeDir":"0"
-                },
-                {
-                    "path":"log",
-                    "pathDir":"$LOCAL_MC_LOG_DIR/$yyyy$mm$dd",
-                    "file":[
-                        {
-                            "format":"hour_error$",
-                            "operation":"delete",
-                            "limit":"9"
-                        },
-                        {
-                            "format":"hour_error$",
-                            "operation":"delete",
-                            "limit":"9"
-                        }
-                    ],
-                    "deleteWholeDir":"0"
+                    "operate":""
                 }
             ]
         },
         {
-            "type":"ad"
+            "typeId":"ad"
         },
         {
-            "type":"other"
+            "typeId":"other"
         }
     ]
 }
