@@ -8,12 +8,26 @@ import os,ConfigParser
 import json
 
 def deligateBash(pathDir,pathDirOperate,fileDir,fileDirOperate,fileFormat,fileOperate,limit):
-    print str(pathDir)+","+str(pathDirOperate)+","+str(fileDir)+","+str(fileDirOperate)+","+str(fileFormat)+","+str(fileOperate)+","+str(limit)   
+    #print str(pathDir)+","+str(pathDirOperate)+","+str(fileDir)+","+str(fileDirOperate)+","+str(fileFormat)+","+str(fileOperate)+","+str(limit)   
     if pathDir is not None:
         if pathDirOperate is not None:
             if pathDirOperate == "delete":
-                cmd = "core-delete.sh "+" -p "+pathDir + "-o "+pathDirOperate 
+                #print str(pathDir)+","+str(pathDirOperate)
+                cmd = "core-delete.sh "+" -p "+pathDir + " -o "+pathDirOperate 
                 os.system(cmd)
+    
+    if pathDirOperate is None:
+        if fileDirOperate is not None:
+            if fileDir is not None:
+                if fileDirOperate == "delete":
+                    cmd = "core-delete.sh "+" -f "+fileDir + " -o "+fileDirOperate 
+                    os.system(cmd)
+    
+    if fileDirOperate is None:
+        if fileDir is not None:
+            if fileOperate == "delete":
+                cmd = "core-delete.sh "+" -f "+fileDir + " -o "+fileOperate +" -l "+ limit
+                os.system(cmd) 
                 
 def getTypeCount(logType):
     return len(logType)

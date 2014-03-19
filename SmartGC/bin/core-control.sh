@@ -81,11 +81,11 @@ done
 cd $baseDir
 . /mc.conf
 
-stat_date=$(date +%Y%m%d)
+
 
 if [[ $operation == 'delete' ]]
 then
-	
+	stat_date=$(date +%Y%m%d)
 	rm_date=$(date -d "$stat_date - $limit days" +%Y%m%d)
 	yyyy=${rm_date:0:4}
 	mm=${rm_date:4:2}

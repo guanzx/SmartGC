@@ -11,12 +11,12 @@
                             "fileDir":"$LOCAL_MC_TMP_DIR",
                             "fileName":[
                                 {
-                                    "format":"clk_bcp_$yyyy$mm$dd$hh",
+                                    "format":"clk_bcp_[$yyyy$mm$dd$hh]",
                                     "operate":"delete",
                                     "limit":7
                                 },
                                 {
-                                    "format":"imp_bcp_$yyyy$mm$dd$hh",
+                                    "format":"imp_bcp_[$yyyy$mm$dd$hh]",
                                     "operate":"delete",
                                     "limit":7
                                 }
