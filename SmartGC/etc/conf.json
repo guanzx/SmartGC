@@ -8,7 +8,7 @@
                     "pathDir":"",
                     "pathName":[
                         {
-                            "fileDir":"$LOCAL_MC_TMP_DIR",
+                            "fileDir":"/hadoop-disk9/artemis/data/mc/tmp",
                             "fileName":[
                                 {
                                     "format":"clk_bcp_[$yyyy$mm$dd$hh]",
@@ -54,7 +54,8 @@
                     "pathDir":"",
                     "pathName":[
                         {
-                            "fileDir":"$LOCAL_MC_OUTPUT_DIR/$yyyy$mm$dd",
+                            "fileDir":"$LOCAL_MC_OUTPUT_DIR",
+                            "dateDir":"$yyyy$mm$dd"
                             "fileName":[
                                 {
                                     "format":"cc_block_$",
@@ -62,7 +63,8 @@
                                     "limit":"8"
                                 }
                             ],
-                            "operate":""
+                            "operate":"delete",
+                            "limit":"7"
                         },
                         {
                             "fileDir":"$LOCAL_MC_OUTPUT_DIR/stableuv",

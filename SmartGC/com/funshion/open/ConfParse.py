@@ -7,28 +7,33 @@ from sys import argv
 import os,ConfigParser
 import json
 
-def deligateBash(pathDir,pathDirOperate,fileDir,fileDirOperate,fileFormat,fileOperate,limit):
-    #print str(pathDir)+","+str(pathDirOperate)+","+str(fileDir)+","+str(fileDirOperate)+","+str(fileFormat)+","+str(fileOperate)+","+str(limit)   
-    if pathDir is not None:
-        if pathDirOperate is not None:
-            if pathDirOperate == "delete":
-                #print str(pathDir)+","+str(pathDirOperate)
-                cmd = "core-delete.sh "+" -p "+pathDir + " -o "+pathDirOperate 
+def deligateBash(pathDir,pathDirOperate,fileDir,dateDir,fileDirOperate,fileLimit,fileFormat,fileOperate,limit):       
+    if fileDir is not None:
+        if dateDir is None:
+            if fileDirOperate == "delete":
+                cmd = "core-delete.sh "+" -f "+fileDir + " -o "+fileOperate + " -l " + limit + " -s" + fileFormat
                 os.system(cmd)
-    
-    if pathDirOperate is None:
-        if fileDirOperate is not None:
-            if fileDir is not None:
-                if fileDirOperate == "delete":
-                    cmd = "core-delete.sh "+" -f "+fileDir + " -o "+fileDirOperate 
-                    os.system(cmd)
-    
-    if fileDirOperate is None:
-        if fileDir is not None:
+        else:
             if fileOperate == "delete":
-                cmd = "core-delete.sh "+" -f "+fileDir + " -o "+fileOperate +" -l "+ limit
+                cmd = "core-delete.sh "+" -f "+fileDir + " -o "+fileOperate +" -l "+ limit + " -d " + dateDir + " -s " + fileFormat
                 os.system(cmd) 
-                
+
+def deligateFileBash(pathDir,pathDirOperate,fileDir,dateDir,fileDirOperate,fileLimit):
+    if fileDirOperate is not None and fileDir is not None:
+        if dateDir is None:
+            if fileDirOperate == "delete":
+                cmd = "core-delete.sh "+" -f "+fileDir + " -o "+fileDirOperate 
+                os.system(cmd)
+        else:
+            if fileDirOperate == "delete":
+                cmd = "core-delete.sh "+" -f "+fileDir + " -o "+fileDirOperate +" -l "+fileLimit + " -t " + dateDir
+
+def deligatePathBash(pathDir,pathDirOperate):
+    if pathDir is not None and pathDirOperate is not None:
+        if pathDirOperate == "delete":
+            cmd = "core-delete.sh "+" -p "+pathDir + " -o "+pathDirOperate 
+            os.system(cmd)               
+
 def getTypeCount(logType):
     return len(logType)
 
@@ -38,8 +43,8 @@ def parseLogTypeProperty(Logtype,proper):
     else:
         typeValue = ""
     return typeValue
-
-def parseFileName(perPathType,pathDir,pathDirOperate,fileDir,fileDirOperate):
+               
+def parseFileName(perPathType,pathDir,pathDirOperate,fileDir,dateDir,fileDirOperate,fileLimit):
     if perPathType.has_key("fileName"):
         fileName = perPathType["fileName"]
         fileNameCount = getTypeCount(fileName)
@@ -48,7 +53,11 @@ def parseFileName(perPathType,pathDir,pathDirOperate,fileDir,fileDirOperate):
                 fileFormat = parseLogTypeProperty(fileName[i],"format")
                 fileOperate = parseLogTypeProperty(fileName[i],"operate")
                 limit = parseLogTypeProperty(fileName[i],"limit")
-                deligateBash(pathDir,pathDirOperate,fileDir,fileDirOperate,fileFormat,fileOperate,limit)
+                deligateBash(pathDir,pathDirOperate,fileDir,dateDir,fileDirOperate,fileLimit,fileFormat,fileOperate,limit)
+        else:
+            deligateFileBash(pathDir,pathDirOperate,fileDir,dateDir,fileDirOperate,fileLimit)
+    else:
+        deligateFileBash(pathDir,pathDirOperate,fileDir,dateDir,fileDirOperate,fileLimit)     
 
 def parsePathName(perPathType,pathDir,pathDirOperate):
     if perPathType.has_key("pathName"):
@@ -57,10 +66,14 @@ def parsePathName(perPathType,pathDir,pathDirOperate):
         if pathNameCount > 0:
             for k in range(0,pathNameCount):
                 fileDir = parseLogTypeProperty(pathName[k],"fileDir")
-                fileDirOperate = parseLogTypeProperty(pathName[k],"operate")     
-                parseFileName(pathName[k],pathDir,pathDirOperate,fileDir,fileDirOperate)                          
+                dateDir = parseLogTypeProperty(pathName[k],"dateDir")
+                fileDirOperate = parseLogTypeProperty(pathName[k],"operate")
+                fileLimit = parseLogTypeProperty(pathName[k],"limit")      
+                parseFileName(pathName[k],pathDir,pathDirOperate,fileDir,dateDir,fileDirOperate,fileLimit)
+        else:
+            deligateBash(pathDir,pathDirOperate)                           
     else:
-        print "请配置相关信息"
+        deligateBash(pathDir,pathDirOperate)
 
 def parsePath(pathType):
     pathTypeCount = getTypeCount(pathType)
