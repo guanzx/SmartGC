@@ -15,7 +15,7 @@ def deligateBash(pathDir,pathDirOperate,fileDir,dateDir,fileDirOperate,fileLimit
                 os.system(cmd)
         else:
             if fileOperate == "delete":
-                cmd = "core-delete.sh "+" -f "+fileDir + " -o "+fileOperate +" -l "+ limit + " -d " + dateDir + " -s " + fileFormat
+                cmd = "core-delete.sh "+" -f "+fileDir + " -o "+fileOperate +" -l "+ limit + " -t " + dateDir + " -s " + fileFormat
                 os.system(cmd) 
 
 def deligateFileBash(pathDir,pathDirOperate,fileDir,dateDir,fileDirOperate,fileLimit):

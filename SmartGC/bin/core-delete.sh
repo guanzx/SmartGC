@@ -79,26 +79,27 @@ do
 
 done
 
-
-deleteWholeDirData() {
-	for fileName in `ls -A $1`
-	do
-		#判断是否是日期目录
-		
-		if test -f $1/$fileName
-		then			
-			echo "$1/$fileName"
-			rm $1/$fileName				
-	    elif test -d $1/$fileName
-		then
-			rm -rf $1/$fileName
-		fi
-	done
-}
-
-deleteConcreteData() {
+deleteDataDir() {
 	current_date=$(date +%Y%m%d)
 	rm_date=$(date -d "$current_date - $2 days" +%Y%m%d)
+	yyyy=${rm_date:0:4}
+	mm=${rm_date:4:2}
+	dd=${rm_date:6:2}
+	for fileName in `ls -A $1`
+	do
+		if [[ $fileName == [2-3][0-9][0-9][0-9][0-1][0-9][0-3][0-9] ]]
+		then
+			if (( $fileName <= $rm_date ))
+			then			
+				rm -rf $1/$fileName
+			fi
+	done
+
+}
+
+deleteConcreteFilewithDataDir() {
+	current_date=$(date +%Y%m%d)
+	rm_date=$(date -d "$current_date - $3 days" +%Y%m%d)
 	yyyy=${rm_date:0:4}
 	mm=${rm_date:4:2}
 	dd=${rm_date:6:2}
@@ -117,24 +118,39 @@ deleteConcreteData() {
 						then
 							fileDate=${subfileName##*_}
 							filePrefix=${subfileName#*_}
-							preFormat=${format#*_}
+							preFormat=${$2#*_}
 							if [[ preFormat == filePrefix ]]
 							then			
 								ymdStr=${fileDate:0:8}
 								if (( $ymdStr <= $rm_date ))
 								then
-									rm $1/$fileName
+									rm $1/$fileName/$subfileName
 								fi
 							fi		
 						fi
 					done
 				fi
 			fi
-		elif test -f $1/$fileName
+		fi
+	done
+
+}
+
+
+deleteConceteFile() {
+	current_date=$(date +%Y%m%d)
+	rm_date=$(date -d "$current_date - $3 days" +%Y%m%d)
+	yyyy=${rm_date:0:4}
+	mm=${rm_date:4:2}
+	dd=${rm_date:6:2}
+	
+	for fileName in `ls -A $1`
+	do
+		if test -f $1/$fileName
 		then			
 			fileDate=${fileName##*_}
 			filePrefix=${fileName#*_}
-			preFormat=${format#*_}
+			preFormat=${$2#*_}
 			if [[ preFormat == filePrefix ]]
 			then			
 				ymdStr=${fileDate:0:8}
@@ -145,23 +161,45 @@ deleteConcreteData() {
 			fi		
 		fi
 	done
+
 }
 
-if [[ $limit != "" ]] &&　[[ $dateDir == "" ]]
+deleteWholeDir() {
+	for fileName in `ls -A $1`
+	do
+		if test -f $1/$fileName
+		then			
+			echo "$1/$fileName"
+			rm $1/$fileName				
+	    elif test -d $1/$fileName
+		then
+			rm -rf $1/$fileName
+		fi
+	done
+}
+
+if [[ $format != "" ]]
 then
-	deleteConcreteData $fileDir $limit	
-else
-	if [[ $pathDir != "" ]]
-	then	
-		deleteWholeDirData $pathDir
-	fi
-	
-	if [[ $fileDir != "" && $operate != "" ]]
+	if [[ $dateDir != "" ]]
 	then
-		deleteWholeDirData $fileDir
+		deleteConcreteFilewithDataDir $fileDir $format $limit
+	else
+		deleteConceteFile $fileDir $format $limit
+	fi
+else
+	if [[ $fileDir != "" ]]
+	then
+		if [[ $dateDir != "" ]]
+		then
+			deleteDataDir $fileDir $limit
+		else
+			deleteWholeDir $fileDir
+		fi
+	else
+		if [[ $pathDir != "" ]]
+		then
+			deleteWholeDir $pathDir
+		fi
 	fi
 fi
-
-
-if [[ dateDir != "" ]]
-then
+		
