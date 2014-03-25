@@ -79,6 +79,8 @@ do
 
 done
 
+current_date=$(date +%Y%m%d)
+
 deleteDataDir() {
 	current_date=$(date +%Y%m%d)
 	rm_date=$(date -d "$current_date - $2 days" +%Y%m%d)
@@ -97,13 +99,28 @@ deleteDataDir() {
 
 }
 
-deleteConcreteFilewithDataDir() {
-	current_date=$(date +%Y%m%d)
-	rm_date=$(date -d "$current_date - $3 days" +%Y%m%d)
-	yyyy=${rm_date:0:4}
-	mm=${rm_date:4:2}
-	dd=${rm_date:6:2}
+# 删除文件 含有3个参数
+deleteFile() {
 	
+	if test -f $1/$2
+	then
+		fileDate=${$2##*_}
+		filePrefix=${$2#*_}
+		preFormat=${$3#*_}
+		if [[ preFormat == filePrefix ]]
+		then			
+			ymdStr=${fileDate:0:8}
+			if (( $ymdStr <= $4 ))
+			then
+				rm $1/$2
+			fi
+		fi		
+	fi
+}
+
+# 删除具体的文件，该文件的上一级目录为日期目录
+deleteConcreteFilewithDataDir() {	
+	rm_date=$(date -d "$current_date - $3 days" +%Y%m%d)
 	for fileName in `ls -A $1`
 	do
 		if [[ $fileName == [2-3][0-9][0-9][0-9][0-1][0-9][0-3][0-9] ]]
@@ -113,55 +130,22 @@ deleteConcreteFilewithDataDir() {
 				if test -d $1/$fileName
 				then
 					for subfileName in `ls -A $1/$fileName`
-					do 
-						if test -f $1/$fileName/$subfileName
-						then
-							fileDate=${subfileName##*_}
-							filePrefix=${subfileName#*_}
-							preFormat=${$2#*_}
-							if [[ preFormat == filePrefix ]]
-							then			
-								ymdStr=${fileDate:0:8}
-								if (( $ymdStr <= $rm_date ))
-								then
-									rm $1/$fileName/$subfileName
-								fi
-							fi		
-						fi
+					do 					
+						deleteFile $1/$fileName $subfileName $2	$rm_date				
 					done
 				fi
 			fi
 		fi
 	done
-
 }
 
 
 deleteConceteFile() {
-	current_date=$(date +%Y%m%d)
 	rm_date=$(date -d "$current_date - $3 days" +%Y%m%d)
-	yyyy=${rm_date:0:4}
-	mm=${rm_date:4:2}
-	dd=${rm_date:6:2}
-	
 	for fileName in `ls -A $1`
-	do
-		if test -f $1/$fileName
-		then			
-			fileDate=${fileName##*_}
-			filePrefix=${fileName#*_}
-			preFormat=${$2#*_}
-			if [[ preFormat == filePrefix ]]
-			then			
-				ymdStr=${fileDate:0:8}
-				if (( $ymdStr <= $rm_date ))
-				then
-					rm $1/$fileName
-				fi
-			fi		
-		fi
+	do	
+		deleteFile $1 $fileName $2	$rm_date
 	done
-
 }
 
 deleteWholeDir() {
